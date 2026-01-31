@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Interactive 3D Cardiac Simulator</title>
+
+  <!-- Elegant fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+  <div class="app">
+
+    <!-- Top bar -->
+    <header class="topbar">
+      <a class="brand" href="#/">
+        <img class="brand__logo" src="assets/logo.svg" alt="Cardiac Simulator" />
+        <div class="brand__stack">
+          <div class="brand__title">Interactive 3D Cardiac Simulator</div>
+          <div class="brand__subtitle">Training + Visualization for Cardiac Rhythms</div>
+        </div>
+      </a>
+
+      <nav class="topnav" aria-label="Top navigation">
+        <a class="topnav__link" href="#/">Home</a>
+        <a class="topnav__link" href="#/about">About</a>
+        <a class="topnav__link topnav__pill" href="#/sim/normal-sinus">Open Simulator</a>
+      </nav>
+    </header>
+
+    <!-- Body: sidebar + main -->
+    <div class="body">
+      <aside class="sidebar" aria-label="Sidebar navigation">
+        <div class="sidebar__section">
+          <div class="sidebar__label">Rhythms</div>
+          <div id="sidebar-list" class="sidebar__list"></div>
+        </div>
+
+        <div class="sidebar__section">
+          <div class="sidebar__label">Quick tools</div>
+          <button id="btn-home" class="sidebar__btn">Go Home</button>
+          <button id="btn-collapse" class="sidebar__btn sidebar__btn--ghost">Collapse sidebar</button>
+        </div>
+
+        <div class="sidebar__footer">
+          <div class="sidebar__tiny">Design lead layout prototype</div>
+        </div>
+      </aside>
+
+      <main class="main" id="app-root" tabindex="-1"></main>
+    </div>
+  </div>
+
+  <script src="scripts/data.js"></script>
+  <script src="scripts/app.js"></script>
+</body>
+</html>
