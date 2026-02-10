@@ -46,11 +46,8 @@ function pageLanding(){
     <section class="page">
       <div class="home-center">
         <h1 class="home-title">Scottsdale Fire Dept.</h1>
-<<<<<<< HEAD
         <p class="home-subtitle">Cardiac Simulator Learning Tool</p>
-=======
-        <p class="home-subtitle">Cardiac Simulator Teaching Site</p>
->>>>>>> ec44823aab8e0979e16be7001386a3ef370e62d2
+
 
 <div class="home-tiles" role="list" aria-label="Main sections">
   <a class="home-tile" href="#/rhythms" role="listitem" aria-label="Open Rhythms">
