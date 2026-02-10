@@ -539,3 +539,45 @@ body{
     drop-shadow(0 6px 14px rgba(0,0,0,0.6))
     drop-shadow(0 0 6px rgba(255,255,255,0.15));
 }
+
+/* ===== Collapsed sidebar: show ONLY shortform tags centered ===== */
+
+.app--collapsed .sidebar {
+  width: 110px; /* keep your nice slim rail */
+}
+
+/* Hide the long rhythm names when collapsed */
+.app--collapsed .sideitem__name {
+  display: none;
+}
+
+/* Make each rhythm row center its contents */
+.app--collapsed .sideitem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 8px;
+}
+
+/* Center the tag pill and make it look intentional */
+.app--collapsed .sideitem__tag {
+  margin: 0;               /* remove any "push to the right" styling */
+  min-width: 56px;         /* consistent pill width */
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+/* Optional: tighten spacing so the list looks clean */
+.app--collapsed .sidebar__list {
+  gap: 10px;
+}
+
+/* Optional: keep active item highlight looking good */
+.app--collapsed .sideitem--active {
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.08) inset;
+}
+
