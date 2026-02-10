@@ -51,5 +51,32 @@ No frameworks required.
 
 ---
 
-## 📁 Project Structure
+## 🎯 Intended Use
+
+This project is intended for educational and training purposes, including:
+- Classroom demonstrations
+- Student learning and practice
+- UI/UX prototyping for medical education tools
+
+This application is **not** a diagnostic tool and should not be used for real-world clinical decision-making.
+
+---
+
+## 📌 Current Status
+
+- Core user interface and navigation complete
+- Rhythms section implemented with collapsible sidebar
+- Case Studies framework in place (Cases 1–8)
+- Review section scaffolded for future use
+- Design and layout finalized for instructional use
+- Future enhancements planned (animations, interactive ECGs, assessments)
+
+---
+
+## 📄 License
+
+This project is provided for **educational purposes only**.
+
+All content is intended for learning and demonstration and is not a substitute for professional medical training or clinical judgment.
+
 
