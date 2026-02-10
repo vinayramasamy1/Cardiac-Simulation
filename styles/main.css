@@ -443,3 +443,99 @@ body{
 .app--collapsed .sideitem{ justify-content:center; }
 .app--collapsed .sideitem__tag{ display:none; }
 .app--collapsed .sidebar__btn{ font-size: 12px; padding: 10px 8px; }
+
+/* ===== Landing Home (3-box sketch layout) ===== */
+.home-center{
+  min-height: calc(100vh - 170px);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  padding-top: 34px;
+  text-align:center;
+}
+
+.home-title{
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.2vw, 44px);
+  margin: 0;
+  letter-spacing: 0.2px;
+}
+
+.home-subtitle{
+  margin: 10px 0 28px 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.home-tiles{
+  width: min(900px, 92vw);
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 12px;
+}
+
+.home-tile{
+  text-decoration:none;
+  color: var(--text);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap: 10px;
+}
+
+.home-tile__box{
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.02);
+  border: 2px solid rgba(255,255,255,0.45);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.30);
+}
+
+.home-tile:hover .home-tile__box{
+  border-color: rgba(125,49,71,0.65);
+  box-shadow: 0 0 0 1px rgba(125,49,71,0.25) inset, 0 14px 34px rgba(0,0,0,0.38);
+}
+
+.home-tile__label{
+  font-family: var(--font-display);
+  font-size: 16px;
+  letter-spacing: 0.25px;
+}
+
+/* Make the 3 boxes stack nicely on small screens */
+@media (max-width: 860px){
+  .home-tiles{
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .home-tile__box{
+    aspect-ratio: 16 / 9;
+  }
+}
+
+.home-tile__box{
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.home-tile__icon{
+  width: 56px;
+  height: 56px;
+  opacity: 0.95;
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.35));
+}
+
+.home-tile:hover .home-tile__icon{
+  transform: translateY(-2px);
+  transition: transform 160ms ease;
+}
+
+.home-tile__icon{
+  filter:
+    drop-shadow(0 6px 14px rgba(0,0,0,0.6))
+    drop-shadow(0 0 6px rgba(255,255,255,0.15));
+}

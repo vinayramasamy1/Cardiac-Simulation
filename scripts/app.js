@@ -14,11 +14,11 @@ function escapeHtml(str){
 }
 
 function getRoute(){
-  // hash routes: #/ , #/about , #/sim/<id>
+  // hash routes: #/ , #/rhythms , #/about , #/case-studies , #/reviews , #/sim/<id>
   const hash = window.location.hash || "#/";
   const clean = hash.replace(/^#/, "");
   const parts = clean.split("/").filter(Boolean);
-  return parts; // [] => home, ["about"], ["sim","normal-sinus"]
+  return parts; // [] => landing home
 }
 
 function setActiveSidebar(activeId){
@@ -38,15 +38,53 @@ function renderSidebar(){
   `).join("");
 }
 
-function pageHome(){
+/* NEW: Landing home page with 3 boxes (Rhythms / Case Studies / Reviews) */
+function pageLanding(){
+  setActiveSidebar(null);
+
+  root.innerHTML = `
+    <section class="page">
+      <div class="home-center">
+        <h1 class="home-title">Scottsdale Fire Dept.</h1>
+        <p class="home-subtitle">Cardiac Simulator Learning Tool</p>
+
+<div class="home-tiles" role="list" aria-label="Main sections">
+  <a class="home-tile" href="#/rhythms" role="listitem" aria-label="Open Rhythms">
+    <div class="home-tile__box">
+      <img class="home-tile__icon" src="assets/icon-rhythms.svg" alt="" />
+    </div>
+    <div class="home-tile__label">Rhythms</div>
+  </a>
+
+  <a class="home-tile" href="case-studies.html" role="listitem" aria-label="Open Case Studies">
+    <div class="home-tile__box">
+      <img class="home-tile__icon" src="assets/icon-case-studies.svg" alt="" />
+    </div>
+    <div class="home-tile__label">Case Studies</div>
+  </a>
+
+  <a class="home-tile" href="reviews.html" role="listitem" aria-label="Open Reviews">
+    <div class="home-tile__box">
+      <img class="home-tile__icon" src="assets/icon-reviews.svg" alt="" />
+    </div>
+    <div class="home-tile__label">Reviews</div>
+  </a>
+</div>
+
+      </div>
+    </section>
+  `;
+}
+
+/* Your existing Rhythms grid becomes its own page: #/rhythms */
+function pageRhythms(){
   setActiveSidebar(null);
 
   const cards = window.RHYTHMS.map(r => `
     <a class="card" href="#/sim/${escapeHtml(r.id)}">
       <div class="card__thumb">
-  <img src="${escapeHtml(r.image)}" alt="${escapeHtml(r.name)} ECG" />
-</div>
-
+        <img src="${escapeHtml(r.image)}" alt="${escapeHtml(r.name)} ECG" />
+      </div>
       <div class="card__body">
         <div class="card__title">${escapeHtml(r.name)}</div>
         <div class="card__desc">${escapeHtml(r.description)}</div>
@@ -57,10 +95,9 @@ function pageHome(){
   root.innerHTML = `
     <section class="page">
       <div class="hero">
-        <h1 class="hero__title">Cardiac Simulator</h1>
+        <h1 class="hero__title">Rhythms</h1>
         <p class="hero__sub">
-          An interactive cardiac simulator that visualizes heart rhythms in real time, helping students
-           and clinicians explore normal and abnormal ECG patterns through clear, dynamic simulations.
+          Select a rhythm to open the simulator module.
         </p>
       </div>
 
@@ -71,12 +108,7 @@ function pageHome(){
   `;
 }
 
-/*
-This is a polished layout prototype with a permanent sidebar and a simulator view.
-          Replace the placeholder “animation canvas” with improved visuals (Blender exports, images, or true 3D)
-          when you’re ready.
-*/
-
+/* Optional (still works in-app if you ever link to these routes) */
 function pageAbout(){
   setActiveSidebar(null);
   root.innerHTML = `
@@ -87,6 +119,36 @@ function pageAbout(){
           The Interactive 3D Cardiac Simulator aims to support paramedic learning through
           visual + interactive training. This coded version gives you full control over layout,
           navigation, and future interactive features.
+        </p>
+      </div>
+    </section>
+  `;
+}
+
+function pageCaseStudies(){
+  setActiveSidebar(null);
+  root.innerHTML = `
+    <section class="page">
+      <div class="hero">
+        <h1 class="hero__title">Case Studies</h1>
+        <p class="hero__sub">
+          This section is ready for scenario-based cases (symptoms, vitals, rhythm strip, treatment choices, outcomes).
+          For now, use the “Case Studies” box on Home which opens case-studies.html.
+        </p>
+      </div>
+    </section>
+  `;
+}
+
+function pageReviews(){
+  setActiveSidebar(null);
+  root.innerHTML = `
+    <section class="page">
+      <div class="hero">
+        <h1 class="hero__title">Reviews</h1>
+        <p class="hero__sub">
+          This section can hold quick knowledge checks, quizzes, or skill validations.
+          For now, use the “Reviews” box on Home which opens reviews.html.
         </p>
       </div>
     </section>
@@ -159,13 +221,29 @@ function pageSim(id){
 function render(){
   const parts = getRoute();
 
+  // [] => landing home (3 boxes)
   if (parts.length === 0){
-    pageHome();
+    pageLanding();
+    return;
+  }
+
+  if (parts[0] === "rhythms"){
+    pageRhythms();
     return;
   }
 
   if (parts[0] === "about"){
     pageAbout();
+    return;
+  }
+
+  if (parts[0] === "case-studies"){
+    pageCaseStudies();
+    return;
+  }
+
+  if (parts[0] === "reviews"){
+    pageReviews();
     return;
   }
 
@@ -175,11 +253,13 @@ function render(){
   }
 
   // fallback
-  pageHome();
+  pageLanding();
 }
 
 function init(){
   renderSidebar();
+  appShell.classList.add("app--collapsed");
+  btnCollapse.textContent = "Expand Sidebar";
 
   btnHome.addEventListener("click", () => {
     window.location.hash = "#/";
@@ -195,5 +275,6 @@ function init(){
   window.addEventListener("hashchange", render);
   render();
 }
+
 
 init();
