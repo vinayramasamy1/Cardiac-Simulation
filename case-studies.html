@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Case Studies • Cardiac Simulator Teaching Site</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- use your main css for consistent look -->
+  <link rel="stylesheet" href="styles/main.css">
+
+  <style>
+    /* Page-specific layout */
+    :root{
+      --cs-left-w: 220px;
+      --cs-right-w: 200px;
+      --gap: 18px;
+    }
+    .cs-app{
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      background: var(--bg, #0f1113);
+      color: var(--text, #fff);
+    }
+    .cs-topbar{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      padding:14px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .cs-back{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      color:var(--muted, #d7d7d7);
+      text-decoration:none;
+      font-weight:500;
+    }
+    .cs-layout{
+      display:grid;
+      grid-template-columns: var(--cs-left-w) 1fr var(--cs-right-w);
+      gap: var(--gap);
+      padding:20px;
+      align-items:start;
+    }
+
+    /* left sidebar list */
+    .cs-left{
+      background: rgba(255,255,255,0.02);
+      border-radius:8px;
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      min-height: calc(100vh - 150px);
+    }
+    .cs-left .cs-list{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      overflow:auto;
+      padding-right:4px;
+    }
+    .cs-item{
+      padding:10px 11px;
+      border-radius:8px;
+      cursor:pointer;
+      user-select:none;
+      font-weight:600;
+      color: white;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+    .cs-item:hover{ background: rgba(255,255,255,0.02); }
+    .cs-item.active{
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border-color: rgba(255,255,255,0.08);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+    }
+
+    .cs-left .cs-quick{ margin-top:auto; display:flex; flex-direction:column; gap:8px; }
+    .cs-btn { padding:8px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background:transparent; color:var(--muted, #ddd); font-weight:600; cursor:pointer;}
+    .cs-btn:active{ transform: translateY(1px); }
+
+    .cs-topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.cs-top-actions{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.cs-top-title{
+  color: rgba(255,255,255,0.55);
+  font-weight:700;
+}
+
+/* shared button look */
+.cs-btn{
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.02);
+  color: rgba(255,255,255,0.9);
+  font-weight:700;
+  cursor:pointer;
+  line-height: 1;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+
+.cs-btn:hover{
+  border-color: rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.03);
+}
+
+.cs-btn:active{
+  transform: translateY(1px);
+}
+
+/* make links look exactly like buttons */
+.cs-btn--link{
+  text-decoration:none;
+}
+
+
+    /* center viewing area */
+    .cs-center{
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+    .cs-view{
+      border-radius:10px;
+      border: 3px solid rgba(255,255,255,0.06);
+      min-height: 420px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:600;
+      color:rgba(255,255,255,0.8);
+      position:relative;
+    }
+    .cs-view .placeholder{
+      text-align:center;
+      color: rgba(255,255,255,0.45);
+    }
+
+    /* right sidebar */
+    .cs-right{
+      background: rgba(255,255,255,0.02);
+      border-radius:8px;
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      min-height: calc(100vh - 150px);
+    }
+    .cs-feature{
+      padding:10px;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,0.03);
+      background:transparent;
+      color:#fff;
+      font-weight:600;
+      text-align:center;
+      cursor:default;
+    }
+
+    /* bottom description */
+    .cs-desc{
+      border-radius:8px;
+      border: 2px dashed rgba(255,255,255,0.04);
+      padding:12px;
+      min-height:88px;
+      color: rgba(255,255,255,0.85);
+      background: rgba(0,0,0,0.02);
+      resize:vertical;
+      outline:none;
+    }
+
+    .cs-title-row{ display:flex; justify-content:space-between; align-items:center; gap:12px;}
+    .cs-title{ font-size:18px; font-weight:700; color:white; margin:0; padding:6px 0;}
+
+    /* collapsed state */
+    /* COLLAPSED: hide left sidebar completely (clean + aligned) */
+
+
+
+    /* responsive */
+    @media (max-width:1000px){
+      .cs-layout{ grid-template-columns: 1fr; }
+      .cs-right{ order:3; }
+      .cs-left{ order:1; display:flex; flex-direction:row; overflow:auto; gap:8px; min-height:auto; }
+      .cs-left .cs-list{ flex-direction:row; gap:8px; }
+      .cs-item{ white-space:nowrap; min-width:160px; }
+    }
+
+    /* ===== Collapsed rail (like your main site) ===== */
+.cs-app.cs-collapsed .cs-layout{
+  grid-template-columns: 110px 1fr var(--cs-right-w);
+}
+
+.cs-app.cs-collapsed .cs-left{
+  width: 110px;
+  padding: 12px 10px;
+}
+
+.cs-app.cs-collapsed .cs-left .cs-list{
+  display: none !important;
+}
+
+/* hide the “Case Studies” header text */
+.cs-app.cs-collapsed .cs-left .cs-left-title{
+  display: none !important;
+}
+
+/* keep quick tools visible */
+.cs-app.cs-collapsed .cs-left .cs-quick{
+  margin-top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cs-app.cs-collapsed .cs-left .cs-btn{
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+  padding: 12px 10px;
+  border-radius: 14px;
+}
+
+/* Center the quick buttons vertically when sidebar is collapsed */
+.cs-app.cs-collapsed .cs-left{
+  display: flex;
+  flex-direction: column;
+}
+
+.cs-app.cs-collapsed .cs-left .cs-quick{
+  margin: auto 0;              /* pushes it to the vertical middle */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+  </style>
+</head>
+
+<body>
+  <div class="cs-app cs-collapsed" id="cs-app">
+<header class="cs-topbar">
+  <div class="cs-top-actions">
+    <a class="cs-btn cs-btn--link" href="index.html#/">
+      Home
+    </a>
+
+    <a class="cs-btn cs-btn--link" href="index.html#/">
+      Go Home
+    </a>
+
+    <button id="btn-collapse" class="cs-btn" type="button">
+      Collapse Sidebar
+    </button>
+  </div>
+
+  <div class="cs-top-title">Case Study</div>
+</header>
+
+
+    <div class="cs-layout" id="cs-layout">
+      <!-- LEFT: list of 8 case studies + quick actions -->
+      <aside class="cs-left" id="cs-left">
+        <div class="cs-left-title" style="font-weight:700; color:rgba(255,255,255,0.9);">
+  Case Studies
+</div>
+
+
+        <div class="cs-list" id="cs-list" role="list" aria-label="Case study list">
+          <!-- JS will populate 8 items -->
+        </div>
+
+        <div class="cs-quick">
+          <button id="quick-home" class="cs-btn">Go Home</button>
+          <button id="quick-collapse" class="cs-btn">Collapse Sidebar</button>
+        </div>
+      </aside>
+      <div class="cs-footer" style="display:none;">
+  Design<br/>Layout<br/>Prototype
+</div>
+
+
+      <!-- CENTER: viewing window + bottom description -->
+      <main class="cs-center">
+        <div class="cs-title-row">
+          <h2 class="cs-title" id="cs-title">Case Study 1</h2>
+          <div style="color:rgba(255,255,255,0.6); font-weight:600" id="cs-meta">#1 • Unassigned</div>
+        </div>
+
+        <div class="cs-view" id="cs-view" role="region" aria-label="Viewing window">
+          <div class="placeholder" id="cs-view-placeholder">
+            Large viewing window — add images, strips, or 3D here.
+          </div>
+        </div>
+
+        <div>
+          <label style="display:block; margin-bottom:8px; color:rgba(255,255,255,0.7); font-weight:600;">Condition overview / description</label>
+          <div id="cs-desc" class="cs-desc" contenteditable="true" aria-label="Case description">
+            <!-- starts empty; user can type -->
+          </div>
+        </div>
+      </main>
+
+      <!-- RIGHT: features -->
+      <aside class="cs-right" aria-label="Case features">
+        <div class="cs-feature">Patient History</div>
+        <div class="cs-feature">Symptoms</div>
+        <div class="cs-feature">Tools / Scans</div>
+        <div class="cs-feature">Treatment</div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const app = document.getElementById('cs-app');
+      const csList = document.getElementById('cs-list');
+      const titleEl = document.getElementById('cs-title');
+      const metaEl = document.getElementById('cs-meta');
+      const viewPlaceholder = document.getElementById('cs-view-placeholder');
+      const descEl = document.getElementById('cs-desc');
+      const btnCollapse = document.getElementById('btn-collapse');
+      const quickCollapse = document.getElementById('quick-collapse');
+      const quickHome = document.getElementById('quick-home');
+
+      // build 8 case studies with minimal metadata
+      const CASES = Array.from({length:8}, (_,i)=>({
+        id: `case-${i+1}`,
+        title: `Case Study ${i+1}`,
+        meta: `#${i+1} • Unassigned`,
+        content: '' // description editable
+      }));
+
+      // render left list
+      function renderList(){
+        csList.innerHTML = CASES.map((c, idx) => `
+          <div class="cs-item ${idx===0? 'active':''}" data-index="${idx}" tabindex="0" role="button" aria-pressed="${idx===0}">
+            ${c.title}
+          </div>
+        `).join('');
+      }
+
+      function setActive(index){
+        // bounds check
+        index = Math.max(0, Math.min(CASES.length-1, index));
+        // update active classes
+        const items = csList.querySelectorAll('.cs-item');
+        items.forEach((it, i) => {
+          if(i===index){
+            it.classList.add('active');
+            it.setAttribute('aria-pressed','true');
+          } else {
+            it.classList.remove('active');
+            it.setAttribute('aria-pressed','false');
+          }
+        });
+
+        // update center
+        const c = CASES[index];
+        titleEl.textContent = c.title;
+        metaEl.textContent = c.meta;
+        viewPlaceholder.textContent = `${c.title} — Viewing window (placeholder)`;
+        descEl.textContent = c.content || '';
+        // store current index
+        app.dataset.active = index;
+      }
+
+      // click handling on list (delegation)
+      csList.addEventListener('click', (e)=>{
+        const item = e.target.closest('.cs-item');
+        if(!item) return;
+        const idx = Number(item.dataset.index);
+        setActive(idx);
+      });
+
+      // keyboard support (enter/space opens)
+      csList.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter' || e.key === ' '){
+          const item = e.target.closest('.cs-item');
+          if(!item) return;
+          const idx = Number(item.dataset.index);
+          setActive(idx);
+          e.preventDefault();
+        }
+      });
+
+      // collapse handlers
+function updateCollapseButton(){
+  const collapsed = app.classList.contains('cs-collapsed');
+  btnCollapse.textContent = collapsed ? "Expand Sidebar" : "Collapse Sidebar";
+  quickCollapse.textContent = collapsed ? "Expand Sidebar" : "Collapse Sidebar";
+}
+
+function toggleCollapse(){
+  app.classList.toggle('cs-collapsed');
+  updateCollapseButton();
+}
+
+btnCollapse.addEventListener('click', toggleCollapse);
+quickCollapse.addEventListener('click', toggleCollapse);
+
+// IMPORTANT: run on page load so text matches state
+updateCollapseButton();
+
+
+      quickCollapse.addEventListener('click', toggleCollapse);
+      quickHome.addEventListener('click', ()=> location.href='index.html#/');
+
+      // persist description edits in memory while the page is open
+      descEl.addEventListener('input', ()=>{
+        const idx = Number(app.dataset.active || 0);
+        CASES[idx].content = descEl.textContent;
+      });
+
+      // init
+      renderList();
+      setActive(0);
+
+      // expose setActive for dev console if you want to test
+      window.__CS = { setActive, CASES };
+    })();
+
+    
+  </script>
+
+  
+</body>
+</html>
+
